@@ -1,0 +1,517 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Adventure Board — Palisade</title>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700;900&family=Cinzel+Decorative:wght@700&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    min-height: 100vh;
+    background: radial-gradient(ellipse at top, #2a1a08 0%, #120b04 100%);
+    font-family: 'Cinzel', serif;
+    padding: 30px 20px;
+    color: #e8c060;
+  }
+
+  ::-webkit-scrollbar { width: 8px; }
+  ::-webkit-scrollbar-track { background: #1a0e06; }
+  ::-webkit-scrollbar-thumb { background: #6b4c2a; border-radius: 4px; }
+
+  .board {
+    max-width: 900px;
+    margin: 0 auto;
+    background: linear-gradient(160deg, #4a2e14 0%, #3a2010 40%, #2e1a0c 100%);
+    border: 6px solid #6b4010;
+    border-radius: 8px;
+    box-shadow: 0 0 40px rgba(0,0,0,0.8), inset 0 0 30px rgba(0,0,0,0.4), 0 0 80px rgba(180,100,20,0.15);
+    padding: 28px 24px 24px;
+    position: relative;
+  }
+
+  .bolt {
+    position: absolute;
+    width: 14px; height: 14px;
+    border-radius: 50%;
+    background: radial-gradient(circle at 35% 35%, #c8a060, #6b4010);
+    box-shadow: 0 2px 4px rgba(0,0,0,0.6);
+    border: 1px solid #8b5a20;
+  }
+  .bolt-tl { top: 10px; left: 10px; }
+  .bolt-tr { top: 10px; right: 10px; }
+  .bolt-bl { bottom: 10px; left: 10px; }
+  .bolt-br { bottom: 10px; right: 10px; }
+
+  .board-title {
+    text-align: center;
+    margin-bottom: 20px;
+  }
+  .board-title h1 {
+    font-family: 'Cinzel Decorative', serif;
+    font-size: clamp(18px, 5vw, 32px);
+    color: #e8c060;
+    text-shadow: 0 0 20px rgba(232,192,96,0.5), 0 2px 4px rgba(0,0,0,0.8);
+    letter-spacing: 4px;
+    margin-bottom: 4px;
+  }
+  .board-title p {
+    font-size: 11px;
+    color: #a07840;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+  }
+  .title-rule {
+    width: 60%; height: 1px;
+    background: linear-gradient(90deg, transparent, #c8a060, transparent);
+    margin: 10px auto 0;
+  }
+
+  .filters {
+    display: flex;
+    gap: 8px;
+    justify-content: center;
+    flex-wrap: wrap;
+    margin-bottom: 22px;
+  }
+  .filter-btn {
+    background: linear-gradient(135deg, #3a2010, #2a1608);
+    border: 1px solid #6b4010;
+    color: #a07840;
+    padding: 5px 14px;
+    border-radius: 3px;
+    font-family: 'Cinzel', serif;
+    font-size: 11px;
+    font-weight: 700;
+    cursor: pointer;
+    letter-spacing: 1px;
+    transition: all 0.2s;
+  }
+  .filter-btn.active {
+    background: linear-gradient(135deg, #c8a060, #a07030);
+    border-color: #e8c060;
+    color: #1a0e06;
+    box-shadow: 0 0 10px rgba(200,160,96,0.4);
+  }
+
+  .rank-section { margin-bottom: 22px; }
+  .rank-divider {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 14px;
+  }
+  .rank-divider .line { flex: 1; height: 1px; }
+  .rank-divider span {
+    font-size: 10px;
+    letter-spacing: 3px;
+    font-weight: 700;
+    text-transform: uppercase;
+  }
+
+  .cards-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(185px, 1fr));
+    gap: 16px;
+  }
+
+  .quest-card {
+    border-radius: 4px;
+    padding: 12px 12px 10px;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    box-shadow: 2px 3px 8px rgba(0,0,0,0.35), inset 0 1px 0 rgba(255,255,255,0.15);
+    position: relative;
+    cursor: pointer;
+    transition: transform 0.15s, box-shadow 0.15s;
+    border-width: 2px;
+    border-style: solid;
+  }
+  .quest-card:hover {
+    transform: translateY(-3px) rotate(-0.5deg);
+    box-shadow: 4px 8px 18px rgba(0,0,0,0.55), inset 0 1px 0 rgba(255,255,255,0.2);
+  }
+  .quest-card .pin {
+    position: absolute;
+    top: -7px; left: 50%;
+    transform: translateX(-50%);
+    width: 10px; height: 10px;
+    border-radius: 50%;
+    background: radial-gradient(circle at 35% 35%, #e84040, #801010);
+    box-shadow: 0 2px 4px rgba(0,0,0,0.5);
+    border: 1px solid #601010;
+  }
+  .quest-card .torn-edge {
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 3px;
+    border-radius: 4px 4px 0 0;
+  }
+  .quest-card .card-title {
+    font-size: 11px;
+    font-weight: 700;
+    line-height: 1.3;
+    margin-top: 4px;
+  }
+  .quest-card .card-meta {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .rank-badge {
+    font-size: 9px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    color: #fff;
+    padding: 2px 6px;
+    border-radius: 2px;
+    text-transform: uppercase;
+  }
+  .stars span { font-size: 14px; letter-spacing: 2px; }
+  .star-on  { color: #c8860a; text-shadow: 0 0 6px #e8a020; }
+  .star-off { color: rgba(192,168,128,0.25); }
+  .card-reward {
+    font-size: 10px;
+    opacity: 0.75;
+    text-align: right;
+    font-style: italic;
+  }
+  .card-tap {
+    font-size: 8px;
+    opacity: 0.4;
+    text-align: center;
+    letter-spacing: 1px;
+    margin-top: 2px;
+  }
+
+  /* Modal */
+  .modal-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    z-index: 1000;
+    background: rgba(0,0,0,0.75);
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    backdrop-filter: blur(3px);
+    animation: fadeIn 0.2s ease;
+  }
+  .modal-overlay.open { display: flex; }
+
+  @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+  @keyframes slideUp { from { transform: translateY(20px) rotate(-1deg); opacity: 0; } to { transform: translateY(0) rotate(0deg); opacity: 1; } }
+
+  .modal-card {
+    border-radius: 6px;
+    max-width: 480px;
+    width: 100%;
+    padding: 28px 28px 24px;
+    position: relative;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.8), inset 0 1px 0 rgba(255,255,255,0.2);
+    font-family: 'Cinzel', serif;
+    animation: slideUp 0.25s ease;
+    border-width: 3px;
+    border-style: solid;
+    max-height: 90vh;
+    overflow-y: auto;
+  }
+  .modal-pin {
+    position: absolute;
+    top: -9px; left: 50%;
+    transform: translateX(-50%);
+    width: 14px; height: 14px;
+    border-radius: 50%;
+    background: radial-gradient(circle at 35% 35%, #e84040, #801010);
+    box-shadow: 0 2px 6px rgba(0,0,0,0.6);
+    border: 1px solid #601010;
+  }
+  .modal-torn {
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 4px;
+    border-radius: 6px 6px 0 0;
+  }
+  .modal-close {
+    position: absolute;
+    top: 10px; right: 10px;
+    background: none;
+    border: none;
+    font-size: 16px;
+    cursor: pointer;
+    padding: 4px 8px;
+    font-family: 'Cinzel', serif;
+    opacity: 0.5;
+    transition: opacity 0.2s;
+  }
+  .modal-close:hover { opacity: 1; }
+  .modal-meta {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 10px;
+    margin-top: 6px;
+    flex-wrap: wrap;
+  }
+  .modal-risk {
+    font-size: 9px;
+    font-style: italic;
+    opacity: 0.5;
+    margin-left: auto;
+  }
+  .modal-title {
+    font-size: 18px;
+    font-weight: 700;
+    line-height: 1.2;
+    margin-bottom: 14px;
+    padding-bottom: 12px;
+  }
+  .modal-desc {
+    font-size: 12px;
+    line-height: 1.7;
+    margin-bottom: 14px;
+    opacity: 0.9;
+  }
+  .modal-row {
+    display: grid;
+    grid-template-columns: 90px 1fr;
+    gap: 8px;
+    margin-bottom: 8px;
+    align-items: start;
+  }
+  .modal-label {
+    font-size: 8px;
+    font-weight: 700;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    padding-top: 2px;
+  }
+  .modal-value {
+    font-size: 11px;
+    line-height: 1.5;
+  }
+  .modal-value.warning {
+    color: #8b1010 !important;
+    font-weight: 700;
+    font-style: normal !important;
+  }
+  .modal-footer {
+    margin-top: 18px;
+    padding-top: 12px;
+    text-align: center;
+    font-size: 8px;
+    opacity: 0.4;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+  }
+
+  .board-footer {
+    text-align: center;
+    margin-top: 16px;
+  }
+  .footer-rule {
+    width: 60%; height: 1px;
+    background: linear-gradient(90deg, transparent, #c8a060, transparent);
+    margin: 0 auto 10px;
+  }
+  .board-footer p {
+    font-size: 9px;
+    color: #6b4820;
+    letter-spacing: 2px;
+  }
+</style>
+</head>
+<body>
+
+<div class="board">
+  <div class="bolt bolt-tl"></div>
+  <div class="bolt bolt-tr"></div>
+  <div class="bolt bolt-bl"></div>
+  <div class="bolt bolt-br"></div>
+
+  <div class="board-title">
+    <h1>⚔ ADVENTURE BOARD ⚔</h1>
+    <p>Palisade — Adventure Society</p>
+    <div class="title-rule"></div>
+  </div>
+
+  <div class="filters">
+    <button class="filter-btn active" onclick="setFilter('All', this)">All</button>
+    <button class="filter-btn" onclick="setFilter('Iron', this)">Iron</button>
+    <button class="filter-btn" onclick="setFilter('Bronze', this)">Bronze</button>
+    <button class="filter-btn" onclick="setFilter('Silver', this)">Silver</button>
+  </div>
+
+  <div id="quest-sections"></div>
+
+  <div class="board-footer">
+    <div class="footer-rule"></div>
+    <p>ALL CONTRACTS ARE BINDING — ABANDON AT YOUR OWN RISK</p>
+  </div>
+</div>
+
+<!-- Modal -->
+<div class="modal-overlay" id="modal" onclick="closeModal(event)">
+  <div class="modal-card" id="modal-card">
+    <div class="modal-pin"></div>
+    <div class="modal-torn" id="modal-torn"></div>
+    <button class="modal-close" id="modal-close" onclick="closeModalDirect()">✕</button>
+    <div class="modal-meta" id="modal-meta"></div>
+    <div class="modal-title" id="modal-title"></div>
+    <div class="modal-desc" id="modal-desc"></div>
+    <div id="modal-rows"></div>
+    <div class="modal-footer">Contract is binding upon signature — Adventure Society, Palisade</div>
+  </div>
+</div>
+
+<script>
+const rankColors = {
+  Iron:   { bg: "#c0a882", border: "#8a7355", text: "#3a2a10", badge: "#8a7355" },
+  Bronze: { bg: "#d4956a", border: "#8b5e3c", text: "#3a1a08", badge: "#8b5e3c" },
+  Silver: { bg: "#b8bcc8", border: "#6e7585", text: "#1a1e2a", badge: "#6e7585" },
+  Gold:   { bg: "#e8c84a", border: "#a08020", text: "#2a1e00", badge: "#a08020" },
+};
+
+const rankOrder = ["Iron", "Bronze", "Silver", "Gold"];
+
+const quests = [
+  { title: "Wolfpack Thinning", rank: "Iron", diff: 1, reward: "40gp + 15gp bonus", postedBy: "Rookstone Farmers Collective", description: "A pack of oversized wolves has been raiding livestock on the eastern farms. Three confirmed attacks in the past week. Farmers are scared and losses are mounting.", objective: "Thin the pack and bring back the alpha's ear as proof.", notes: "Two Green-rank groups already passed on this. Nobody says why.", location: "Eastern farms, one day from Palisade" },
+  { title: "Escort — Sister Orvyn's Supply Run", rank: "Iron", diff: 1, reward: "30gp + one free heal per member", postedBy: "Sister Orvyn, The Mending Post", description: "Medicines and reagents need picking up from a supplier two days north and returned safely to Palisade. The road has seen bandit activity recently.", objective: "Escort Sister Orvyn to the supplier and back safely.", notes: "Sister Orvyn will be accompanying you. She is, quote, 'perfectly capable of keeping up.'", location: "North Road, two days travel" },
+  { title: "Bridge Assessment — Coldrun Crossing", rank: "Iron", diff: 1, reward: "20gp", postedBy: "Palisade Trade Commission", description: "The Coldrun bridge has been structurally compromised following recent flooding. An engineer needs to assess the damage but the crossing has become dangerous.", objective: "Escort the engineer to Coldrun Crossing and keep him alive while he works.", notes: "Non-combat likely. Structural hazard is the main concern.", location: "Coldrun Crossing, half day east" },
+  { title: "Lost Surveyor", rank: "Iron", diff: 2, reward: "55gp, 80gp if returned alive", postedBy: "Merchant Aldous Fenk", description: "My surveyor went into the Ashplains border to map a potential trade route four days ago. He has not returned. Find him or find out what happened.", objective: "Locate the surveyor and return him alive, or confirm his fate.", notes: "The Ashplains border is where volcanic badlands meet the Greenhold. Strange things happen at that edge.", location: "Ashplains border, two days east" },
+  { title: "Granary Infestation — Millward", rank: "Iron", diff: 2, reward: "35gp + one week lodging", postedBy: "Town of Millward", description: "Something has gotten into the granary. Started as rats. It's not rats anymore. Half the winter stores are already ruined.", objective: "Identify and eliminate whatever is in the Millward granary.", notes: "Vague on what 'not rats anymore' means. Millward residents are refusing to elaborate.", location: "Millward, half day south of Palisade" },
+  { title: "Fenceline Haunting — Aldewick Road", rank: "Iron", diff: 2, reward: "25gp + food and lodging", postedBy: "Aldewick Farming Collective", description: "Farmers report a figure walking the old fenceline at night. Livestock won't go near the northern fields. Two farmhands have quit.", objective: "Investigate the disturbance and resolve it by any means necessary.", notes: "Figure has been spotted for nine consecutive nights. Always the same stretch of fenceline.", location: "Aldewick Road, north Greenhold" },
+  { title: "Ruins Retrieval", rank: "Iron", diff: 3, reward: "45gp flat", postedBy: "Society Archival Division", description: "Retrieve a locked iron box from a collapsed waystation two days east. No need to open it. Just bring it back intact.", objective: "Return the iron box to the Palisade Assay Office, sealed.", notes: "Three previous retrieval attempts on record. Box is apparently still there. Groups are not. Society is not elaborating further.", location: "Collapsed waystation, two days east" },
+  { title: "Bounty — Daven Crook", rank: "Bronze", diff: 1, reward: "80gp alive, 30gp dead", postedBy: "Adventure Society, Palisade Branch", description: "Wanted con man currently posing as a Society assessor to extort new adventurers for false registration fees. Non-violent but slippery.", objective: "Apprehend Daven Crook and return him to Society custody.", notes: "Last seen near Millward. Has at least three known aliases. Prefers talking his way out of things.", location: "Last seen Millward area" },
+  { title: "Missing Merchant Caravan", rank: "Bronze", diff: 2, reward: "100gp + 20gp per recovered wagon", postedBy: "Thornvast Merchant Guild", description: "A four-wagon caravan out of Thornvast went missing on the North Road six days ago. No distress signal. No wreckage found. Simply gone.", objective: "Locate the caravan and recover wagons and personnel where possible.", notes: "Caravan was carrying luxury goods and one unnamed passenger. Guild is tight-lipped about the passenger.", location: "North Road, between Palisade and Aldewick" },
+  { title: "Creature Disturbance — Ashplains Fringe", rank: "Bronze", diff: 2, reward: "120gp", postedBy: "Palisade Society Hall", description: "Something large has been moving along the Ashplains border at night. Three homesteads destroyed, no casualties yet. Origin and nature unknown.", objective: "Track, identify, and neutralise the creature.", notes: "Footprints recovered are unlike any catalogued species. Society wants a specimen sample if possible.", location: "Ashplains fringe, eastern border" },
+  { title: "Dungeon Clear — The Siltmere Burrows", rank: "Bronze", diff: 3, reward: "200gp + salvage rights", postedBy: "Millward Town Council", description: "A flooded dungeon complex south of Millward has become active after years of dormancy. Creatures emerging at night. If left unchecked it becomes a regional problem.", objective: "Clear the Siltmere Burrows completely. No partial completions accepted.", notes: "Last group came back short two members. They did come back. Watch the second room.", location: "Siltmere Burrows, south of Millward" },
+  { title: "Investigation — The Hollow Fringe", rank: "Bronze", diff: 3, reward: "175gp + Society commendation", postedBy: "Society Archival Division", description: "Corruption behavior at The Hollow's edge has changed in the past month. Previously predictable patterns have become erratic. Society wants eyes on it.", objective: "Observe and document changes at the Hollow fringe. Do not enter The Hollow itself.", notes: "DO NOT ENTER THE HOLLOW. This is not a suggestion. Previous groups who entered are listed as missing, not dead, because we never found them.", location: "The Hollow fringe, central Ceder" },
+  { title: "Bounty — The Ashen Choir", rank: "Silver", diff: 2, reward: "400gp + Society bounty bonus", postedBy: "Adventure Society, Regional Command", description: "A cult operating out of the Ashplains has been raiding caravans and leaving survivors in a changed state — docile, vacant, and unable to recall events. Find their base.", objective: "Locate the Ashen Choir's base of operations and neutralise leadership.", notes: "Survivors describe chanting and a smell of ash and copper before losing consciousness. Cult numbers estimated at 30–50.", location: "Ashplains interior, exact location unknown" },
+  { title: "Escort — Councillor's Envoy", rank: "Silver", diff: 2, reward: "350gp", postedBy: "Office of Councillor Edric Voss", description: "A political envoy carrying sensitive documents must travel from Palisade to Thornvast safely. Threat level assessed as significant. Previous escort attempt failed.", objective: "Deliver the envoy and documents to Thornvast intact. Discretion required.", notes: "Nature of the documents is classified. You are not to read them. Councillor Voss will know if you do.", location: "Palisade to Thornvast, South Road" },
+  { title: "Anomaly Response — Frostmere Outpost", rank: "Silver", diff: 3, reward: "600gp + Society emergency bonus", postedBy: "Adventure Society, Regional Command", description: "The Frostmere outpost has gone silent. Last report three weeks ago mentioned something moving under the ice. Six staff unaccounted for.", objective: "Reach the Frostmere outpost, determine what happened, and eliminate the threat.", notes: "Third posting. No takers. Emergency classification active. Society is offering additional hazard compensation.", location: "Frostmere outpost, northeast Ceder" },
+];
+
+let currentFilter = "All";
+
+function stars(diff) {
+  let s = '';
+  for (let i = 1; i <= 3; i++) {
+    s += `<span class="${i <= diff ? 'star-on' : 'star-off'}">★</span>`;
+  }
+  return `<span class="stars">${s}</span>`;
+}
+
+function renderBoard() {
+  const container = document.getElementById('quest-sections');
+  container.innerHTML = '';
+  const filtered = currentFilter === 'All' ? quests : quests.filter(q => q.rank === currentFilter);
+
+  rankOrder.forEach(rank => {
+    const qs = filtered.filter(q => q.rank === rank);
+    if (!qs.length) return;
+    const c = rankColors[rank];
+
+    const section = document.createElement('div');
+    section.className = 'rank-section';
+    section.innerHTML = `
+      <div class="rank-divider">
+        <div class="line" style="background: linear-gradient(90deg, transparent, ${c.border})"></div>
+        <span style="color: ${c.border}">${rank} Rank</span>
+        <div class="line" style="background: linear-gradient(90deg, ${c.border}, transparent)"></div>
+      </div>
+      <div class="cards-grid">
+        ${qs.map((q, i) => `
+          <div class="quest-card" onclick="openModal(${quests.indexOf(q)})"
+            style="background: linear-gradient(135deg, ${c.bg}ee, ${c.bg}cc); border-color: ${c.border}; color: ${c.text};">
+            <div class="pin"></div>
+            <div class="torn-edge" style="background: repeating-linear-gradient(90deg, transparent, transparent 4px, ${c.border}44 4px, ${c.border}44 5px)"></div>
+            <div class="card-title" style="color: ${c.text}">${q.title}</div>
+            <div class="card-meta">
+              <span class="rank-badge" style="background: ${c.badge}">${q.rank}</span>
+              ${stars(q.diff)}
+            </div>
+            <div class="card-reward" style="color: ${c.text}">${q.reward.split(',')[0]}</div>
+            <div class="card-tap" style="color: ${c.text}">TAP TO READ</div>
+          </div>
+        `).join('')}
+      </div>
+    `;
+    container.appendChild(section);
+  });
+}
+
+function setFilter(rank, btn) {
+  currentFilter = rank;
+  document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  renderBoard();
+}
+
+function openModal(index) {
+  const q = quests[index];
+  const c = rankColors[q.rank];
+  const modal = document.getElementById('modal');
+  const card = document.getElementById('modal-card');
+
+  card.style.background = `linear-gradient(160deg, ${c.bg}f8, ${c.bg}e0)`;
+  card.style.borderColor = c.border;
+
+  document.getElementById('modal-torn').style.background =
+    `repeating-linear-gradient(90deg, transparent, transparent 6px, ${c.border}55 6px, ${c.border}55 7px)`;
+  document.getElementById('modal-close').style.color = c.text;
+
+  const riskLabel = q.diff === 1 ? 'Low Risk' : q.diff === 2 ? 'Standard Risk' : '⚠ HIGH RISK';
+  document.getElementById('modal-meta').innerHTML = `
+    <span class="rank-badge" style="background: ${c.badge}; font-size: 10px; padding: 3px 10px; letter-spacing: 2px;">${q.rank} Rank</span>
+    ${stars(q.diff)}
+    <span class="modal-risk" style="color: ${c.text}">${riskLabel}</span>
+  `;
+
+  document.getElementById('modal-title').style.color = c.text;
+  document.getElementById('modal-title').style.borderBottom = `1px solid ${c.border}55`;
+  document.getElementById('modal-title').textContent = q.title;
+
+  document.getElementById('modal-desc').style.color = c.text;
+  document.getElementById('modal-desc').textContent = q.description;
+
+  const rows = [
+    { label: 'OBJECTIVE', value: q.objective },
+    { label: 'LOCATION', value: q.location },
+    { label: 'POSTED BY', value: q.postedBy },
+    { label: 'REWARD', value: q.reward },
+    { label: 'NOTES', value: q.notes, italic: true, warning: q.notes.includes('DO NOT') },
+  ];
+
+  document.getElementById('modal-rows').innerHTML = rows.map(row => `
+    <div class="modal-row">
+      <span class="modal-label" style="color: ${c.badge}">${row.label}</span>
+      <span class="modal-value ${row.warning ? 'warning' : ''}"
+        style="color: ${row.warning ? '#8b1010' : c.text}; font-style: ${row.italic && !row.warning ? 'italic' : 'normal'}">
+        ${row.value}
+      </span>
+    </div>
+  `).join('');
+
+  document.getElementById('modal-footer') && (document.querySelector('.modal-footer').style.borderTop = `1px solid ${c.border}55`);
+  document.querySelector('.modal-footer').style.color = c.text;
+
+  modal.classList.add('open');
+}
+
+function closeModal(e) {
+  if (e.target === document.getElementById('modal')) {
+    document.getElementById('modal').classList.remove('open');
+  }
+}
+
+function closeModalDirect() {
+  document.getElementById('modal').classList.remove('open');
+}
+
+renderBoard();
+</script>
+</body>
+</html>
