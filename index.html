@@ -7,7 +7,6 @@
 <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700;900&family=Cinzel+Decorative:wght@700&display=swap" rel="stylesheet">
 <style>
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
   body {
     min-height: 100vh;
     background: radial-gradient(ellipse at top, #2a1a08 0%, #120b04 100%);
@@ -15,321 +14,181 @@
     padding: 30px 20px;
     color: #e8c060;
   }
-
   ::-webkit-scrollbar { width: 8px; }
   ::-webkit-scrollbar-track { background: #1a0e06; }
   ::-webkit-scrollbar-thumb { background: #6b4c2a; border-radius: 4px; }
 
   .board {
-    max-width: 900px;
-    margin: 0 auto;
+    max-width: 960px; margin: 0 auto;
     background: linear-gradient(160deg, #4a2e14 0%, #3a2010 40%, #2e1a0c 100%);
-    border: 6px solid #6b4010;
-    border-radius: 8px;
+    border: 6px solid #6b4010; border-radius: 8px;
     box-shadow: 0 0 40px rgba(0,0,0,0.8), inset 0 0 30px rgba(0,0,0,0.4), 0 0 80px rgba(180,100,20,0.15);
-    padding: 28px 24px 24px;
-    position: relative;
+    padding: 28px 24px 24px; position: relative;
   }
-
-  .bolt {
-    position: absolute;
-    width: 14px; height: 14px;
-    border-radius: 50%;
+  .bolt { position: absolute; width: 14px; height: 14px; border-radius: 50%;
     background: radial-gradient(circle at 35% 35%, #c8a060, #6b4010);
-    box-shadow: 0 2px 4px rgba(0,0,0,0.6);
-    border: 1px solid #8b5a20;
-  }
-  .bolt-tl { top: 10px; left: 10px; }
-  .bolt-tr { top: 10px; right: 10px; }
-  .bolt-bl { bottom: 10px; left: 10px; }
-  .bolt-br { bottom: 10px; right: 10px; }
+    box-shadow: 0 2px 4px rgba(0,0,0,0.6); border: 1px solid #8b5a20; }
+  .bolt-tl{top:10px;left:10px;} .bolt-tr{top:10px;right:10px;}
+  .bolt-bl{bottom:10px;left:10px;} .bolt-br{bottom:10px;right:10px;}
 
-  .board-title {
-    text-align: center;
-    margin-bottom: 20px;
-  }
-  .board-title h1 {
-    font-family: 'Cinzel Decorative', serif;
-    font-size: clamp(18px, 5vw, 32px);
-    color: #e8c060;
-    text-shadow: 0 0 20px rgba(232,192,96,0.5), 0 2px 4px rgba(0,0,0,0.8);
-    letter-spacing: 4px;
-    margin-bottom: 4px;
-  }
-  .board-title p {
-    font-size: 11px;
-    color: #a07840;
-    letter-spacing: 3px;
-    text-transform: uppercase;
-  }
-  .title-rule {
-    width: 60%; height: 1px;
-    background: linear-gradient(90deg, transparent, #c8a060, transparent);
-    margin: 10px auto 0;
-  }
+  .board-title { text-align: center; margin-bottom: 20px; }
+  .board-title h1 { font-family: 'Cinzel Decorative', serif; font-size: clamp(18px,5vw,32px);
+    color: #e8c060; text-shadow: 0 0 20px rgba(232,192,96,0.5), 0 2px 4px rgba(0,0,0,0.8);
+    letter-spacing: 4px; margin-bottom: 4px; }
+  .board-title p { font-size: 11px; color: #a07840; letter-spacing: 3px; text-transform: uppercase; }
+  .title-rule { width: 60%; height: 1px; background: linear-gradient(90deg, transparent, #c8a060, transparent); margin: 10px auto 0; }
 
-  .filters {
-    display: flex;
-    gap: 8px;
-    justify-content: center;
-    flex-wrap: wrap;
-    margin-bottom: 22px;
-  }
+  .top-bar { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px; margin-bottom: 22px; }
+  .filters { display: flex; gap: 8px; flex-wrap: wrap; }
   .filter-btn {
-    background: linear-gradient(135deg, #3a2010, #2a1608);
-    border: 1px solid #6b4010;
-    color: #a07840;
-    padding: 5px 14px;
-    border-radius: 3px;
-    font-family: 'Cinzel', serif;
-    font-size: 11px;
-    font-weight: 700;
-    cursor: pointer;
-    letter-spacing: 1px;
-    transition: all 0.2s;
+    background: linear-gradient(135deg, #3a2010, #2a1608); border: 1px solid #6b4010;
+    color: #a07840; padding: 5px 14px; border-radius: 3px; font-family: 'Cinzel', serif;
+    font-size: 11px; font-weight: 700; cursor: pointer; letter-spacing: 1px; transition: all 0.2s;
   }
-  .filter-btn.active {
-    background: linear-gradient(135deg, #c8a060, #a07030);
-    border-color: #e8c060;
-    color: #1a0e06;
-    box-shadow: 0 0 10px rgba(200,160,96,0.4);
+  .filter-btn.active { background: linear-gradient(135deg, #c8a060, #a07030); border-color: #e8c060; color: #1a0e06; box-shadow: 0 0 10px rgba(200,160,96,0.4); }
+
+  .dm-btn {
+    background: linear-gradient(135deg, #2a1a3a, #1a0e28); border: 1px solid #6b4090;
+    color: #c080e0; padding: 5px 14px; border-radius: 3px; font-family: 'Cinzel', serif;
+    font-size: 11px; font-weight: 700; cursor: pointer; letter-spacing: 1px; transition: all 0.2s;
   }
+  .dm-btn.active { background: linear-gradient(135deg, #8040c0, #6020a0); border-color: #c080e0; color: #fff; box-shadow: 0 0 10px rgba(180,80,220,0.4); }
+  .dm-btn.add-btn { background: linear-gradient(135deg, #1a3a1a, #0e280e); border-color: #409040; color: #80c080; }
+  .dm-btn.add-btn:hover { background: linear-gradient(135deg, #408040, #206020); color: #fff; }
+
+  .dm-banner {
+    display: none; background: linear-gradient(135deg, #2a1a3a, #1a0e28);
+    border: 1px solid #6b4090; border-radius: 4px; padding: 8px 14px;
+    text-align: center; font-size: 10px; color: #c080e0; letter-spacing: 2px;
+    margin-bottom: 16px;
+  }
+  .dm-banner.visible { display: block; }
 
   .rank-section { margin-bottom: 22px; }
-  .rank-divider {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    margin-bottom: 14px;
-  }
+  .rank-divider { display: flex; align-items: center; gap: 10px; margin-bottom: 14px; }
   .rank-divider .line { flex: 1; height: 1px; }
-  .rank-divider span {
-    font-size: 10px;
-    letter-spacing: 3px;
-    font-weight: 700;
-    text-transform: uppercase;
-  }
+  .rank-divider span { font-size: 10px; letter-spacing: 3px; font-weight: 700; text-transform: uppercase; }
 
-  .cards-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(185px, 1fr));
-    gap: 16px;
-  }
+  .cards-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(185px, 1fr)); gap: 16px; }
 
   .quest-card {
-    border-radius: 4px;
-    padding: 12px 12px 10px;
-    display: flex;
-    flex-direction: column;
-    gap: 6px;
+    border-radius: 4px; padding: 12px 12px 10px; display: flex; flex-direction: column; gap: 6px;
     box-shadow: 2px 3px 8px rgba(0,0,0,0.35), inset 0 1px 0 rgba(255,255,255,0.15);
-    position: relative;
-    cursor: pointer;
-    transition: transform 0.15s, box-shadow 0.15s;
-    border-width: 2px;
-    border-style: solid;
+    position: relative; cursor: pointer; transition: transform 0.15s, box-shadow 0.15s;
+    border-width: 2px; border-style: solid;
   }
-  .quest-card:hover {
-    transform: translateY(-3px) rotate(-0.5deg);
-    box-shadow: 4px 8px 18px rgba(0,0,0,0.55), inset 0 1px 0 rgba(255,255,255,0.2);
-  }
-  .quest-card .pin {
-    position: absolute;
-    top: -7px; left: 50%;
-    transform: translateX(-50%);
-    width: 10px; height: 10px;
-    border-radius: 50%;
-    background: radial-gradient(circle at 35% 35%, #e84040, #801010);
-    box-shadow: 0 2px 4px rgba(0,0,0,0.5);
-    border: 1px solid #601010;
-  }
-  .quest-card .torn-edge {
-    position: absolute;
-    top: 0; left: 0; right: 0;
-    height: 3px;
-    border-radius: 4px 4px 0 0;
-  }
-  .quest-card .card-title {
-    font-size: 11px;
-    font-weight: 700;
-    line-height: 1.3;
-    margin-top: 4px;
-  }
-  .quest-card .card-meta {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-  }
-  .rank-badge {
-    font-size: 9px;
-    font-weight: 700;
-    letter-spacing: 1px;
-    color: #fff;
-    padding: 2px 6px;
-    border-radius: 2px;
-    text-transform: uppercase;
-  }
+  .quest-card:hover { transform: translateY(-3px) rotate(-0.5deg); box-shadow: 4px 8px 18px rgba(0,0,0,0.55), inset 0 1px 0 rgba(255,255,255,0.2); }
+  .quest-card.dm-mode:hover { transform: none; box-shadow: 0 0 0 2px #c080e0, 2px 3px 8px rgba(0,0,0,0.35); }
+  .pin { position: absolute; top: -7px; left: 50%; transform: translateX(-50%); width: 10px; height: 10px;
+    border-radius: 50%; background: radial-gradient(circle at 35% 35%, #e84040, #801010);
+    box-shadow: 0 2px 4px rgba(0,0,0,0.5); border: 1px solid #601010; }
+  .torn-edge { position: absolute; top: 0; left: 0; right: 0; height: 3px; border-radius: 4px 4px 0 0; }
+  .card-title { font-size: 11px; font-weight: 700; line-height: 1.3; margin-top: 4px; }
+  .card-meta { display: flex; justify-content: space-between; align-items: center; }
+  .rank-badge { font-size: 9px; font-weight: 700; letter-spacing: 1px; color: #fff; padding: 2px 6px; border-radius: 2px; text-transform: uppercase; }
   .stars span { font-size: 14px; letter-spacing: 2px; }
-  .star-on  { color: #c8860a; text-shadow: 0 0 6px #e8a020; }
+  .star-on { color: #c8860a; text-shadow: 0 0 6px #e8a020; }
   .star-off { color: rgba(192,168,128,0.25); }
-  .card-reward {
-    font-size: 10px;
-    opacity: 0.75;
-    text-align: right;
-    font-style: italic;
-  }
-  .card-tap {
-    font-size: 8px;
-    opacity: 0.4;
-    text-align: center;
-    letter-spacing: 1px;
-    margin-top: 2px;
-  }
+  .card-reward { font-size: 10px; opacity: 0.75; text-align: right; font-style: italic; }
+  .card-tap { font-size: 8px; opacity: 0.4; text-align: center; letter-spacing: 1px; margin-top: 2px; }
+  .card-dm-actions { display: none; gap: 6px; margin-top: 4px; }
+  .dm-mode .card-dm-actions { display: flex; }
+  .card-dm-btn { flex: 1; padding: 4px; border-radius: 2px; border: none; font-family: 'Cinzel', serif; font-size: 9px; font-weight: 700; cursor: pointer; letter-spacing: 1px; }
+  .edit-card-btn { background: #6040a0; color: #fff; }
+  .edit-card-btn:hover { background: #8060c0; }
+  .delete-card-btn { background: #801010; color: #fff; }
+  .delete-card-btn:hover { background: #c01010; }
 
-  /* Modal */
+  /* Modals */
   .modal-overlay {
-    display: none;
-    position: fixed;
-    inset: 0;
-    z-index: 1000;
-    background: rgba(0,0,0,0.75);
-    align-items: center;
-    justify-content: center;
-    padding: 20px;
-    backdrop-filter: blur(3px);
-    animation: fadeIn 0.2s ease;
+    display: none; position: fixed; inset: 0; z-index: 1000;
+    background: rgba(0,0,0,0.75); align-items: center; justify-content: center;
+    padding: 20px; backdrop-filter: blur(3px);
   }
   .modal-overlay.open { display: flex; }
-
-  @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
   @keyframes slideUp { from { transform: translateY(20px) rotate(-1deg); opacity: 0; } to { transform: translateY(0) rotate(0deg); opacity: 1; } }
 
   .modal-card {
-    border-radius: 6px;
-    max-width: 480px;
-    width: 100%;
-    padding: 28px 28px 24px;
-    position: relative;
-    box-shadow: 0 20px 60px rgba(0,0,0,0.8), inset 0 1px 0 rgba(255,255,255,0.2);
-    font-family: 'Cinzel', serif;
-    animation: slideUp 0.25s ease;
-    border-width: 3px;
-    border-style: solid;
-    max-height: 90vh;
-    overflow-y: auto;
+    border-radius: 6px; max-width: 480px; width: 100%; padding: 28px 28px 24px;
+    position: relative; box-shadow: 0 20px 60px rgba(0,0,0,0.8), inset 0 1px 0 rgba(255,255,255,0.2);
+    font-family: 'Cinzel', serif; animation: slideUp 0.25s ease; border-width: 3px; border-style: solid;
+    max-height: 90vh; overflow-y: auto;
   }
-  .modal-pin {
-    position: absolute;
-    top: -9px; left: 50%;
-    transform: translateX(-50%);
-    width: 14px; height: 14px;
-    border-radius: 50%;
+  .modal-pin { position: absolute; top: -9px; left: 50%; transform: translateX(-50%);
+    width: 14px; height: 14px; border-radius: 50%;
     background: radial-gradient(circle at 35% 35%, #e84040, #801010);
-    box-shadow: 0 2px 6px rgba(0,0,0,0.6);
-    border: 1px solid #601010;
-  }
-  .modal-torn {
-    position: absolute;
-    top: 0; left: 0; right: 0;
-    height: 4px;
-    border-radius: 6px 6px 0 0;
-  }
-  .modal-close {
-    position: absolute;
-    top: 10px; right: 10px;
-    background: none;
-    border: none;
-    font-size: 16px;
-    cursor: pointer;
-    padding: 4px 8px;
-    font-family: 'Cinzel', serif;
-    opacity: 0.5;
-    transition: opacity 0.2s;
-  }
+    box-shadow: 0 2px 6px rgba(0,0,0,0.6); border: 1px solid #601010; }
+  .modal-torn { position: absolute; top: 0; left: 0; right: 0; height: 4px; border-radius: 6px 6px 0 0; }
+  .modal-close { position: absolute; top: 10px; right: 10px; background: none; border: none;
+    font-size: 16px; cursor: pointer; padding: 4px 8px; font-family: 'Cinzel', serif; opacity: 0.5; transition: opacity 0.2s; }
   .modal-close:hover { opacity: 1; }
-  .modal-meta {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    margin-bottom: 10px;
-    margin-top: 6px;
-    flex-wrap: wrap;
-  }
-  .modal-risk {
-    font-size: 9px;
-    font-style: italic;
-    opacity: 0.5;
-    margin-left: auto;
-  }
-  .modal-title {
-    font-size: 18px;
-    font-weight: 700;
-    line-height: 1.2;
-    margin-bottom: 14px;
-    padding-bottom: 12px;
-  }
-  .modal-desc {
-    font-size: 12px;
-    line-height: 1.7;
-    margin-bottom: 14px;
-    opacity: 0.9;
-  }
-  .modal-row {
-    display: grid;
-    grid-template-columns: 90px 1fr;
-    gap: 8px;
-    margin-bottom: 8px;
-    align-items: start;
-  }
-  .modal-label {
-    font-size: 8px;
-    font-weight: 700;
-    letter-spacing: 1.5px;
-    text-transform: uppercase;
-    padding-top: 2px;
-  }
-  .modal-value {
-    font-size: 11px;
-    line-height: 1.5;
-  }
-  .modal-value.warning {
-    color: #8b1010 !important;
-    font-weight: 700;
-    font-style: normal !important;
-  }
-  .modal-footer {
-    margin-top: 18px;
-    padding-top: 12px;
-    text-align: center;
-    font-size: 8px;
-    opacity: 0.4;
-    letter-spacing: 2px;
-    text-transform: uppercase;
-  }
+  .modal-meta { display: flex; align-items: center; gap: 10px; margin-bottom: 10px; margin-top: 6px; flex-wrap: wrap; }
+  .modal-risk { font-size: 9px; font-style: italic; opacity: 0.5; margin-left: auto; }
+  .modal-title { font-size: 18px; font-weight: 700; line-height: 1.2; margin-bottom: 14px; padding-bottom: 12px; }
+  .modal-desc { font-size: 12px; line-height: 1.7; margin-bottom: 14px; opacity: 0.9; }
+  .modal-row { display: grid; grid-template-columns: 90px 1fr; gap: 8px; margin-bottom: 8px; align-items: start; }
+  .modal-label { font-size: 8px; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; padding-top: 2px; }
+  .modal-value { font-size: 11px; line-height: 1.5; }
+  .modal-value.warning { color: #8b1010 !important; font-weight: 700; font-style: normal !important; }
+  .modal-footer { margin-top: 18px; padding-top: 12px; text-align: center; font-size: 8px; opacity: 0.4; letter-spacing: 2px; text-transform: uppercase; }
 
-  .board-footer {
-    text-align: center;
-    margin-top: 16px;
+  /* Edit / Add Modal */
+  .edit-modal { max-width: 560px; background: linear-gradient(160deg, #2a1a3a, #1a0e28) !important; border-color: #6b4090 !important; }
+  .edit-modal .modal-pin { background: radial-gradient(circle at 35% 35%, #c080e0, #601090); }
+  .edit-title { font-size: 16px; font-weight: 700; color: #c080e0; margin-bottom: 18px; margin-top: 6px; letter-spacing: 2px; text-align: center; }
+  .edit-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 12px; }
+  .edit-field { display: flex; flex-direction: column; gap: 4px; }
+  .edit-field.full { grid-column: 1 / -1; }
+  .edit-label { font-size: 8px; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; color: #c080e0; }
+  .edit-input, .edit-select, .edit-textarea {
+    background: #1a0e28; border: 1px solid #6b4090; border-radius: 3px;
+    color: #e0c0f0; font-family: 'Cinzel', serif; font-size: 11px; padding: 6px 8px;
+    outline: none; transition: border-color 0.2s;
   }
-  .footer-rule {
-    width: 60%; height: 1px;
-    background: linear-gradient(90deg, transparent, #c8a060, transparent);
-    margin: 0 auto 10px;
-  }
-  .board-footer p {
-    font-size: 9px;
-    color: #6b4820;
-    letter-spacing: 2px;
-  }
+  .edit-input:focus, .edit-select:focus, .edit-textarea:focus { border-color: #c080e0; }
+  .edit-textarea { resize: vertical; min-height: 60px; }
+  .edit-select option { background: #1a0e28; }
+  .star-selector { display: flex; gap: 6px; padding-top: 4px; }
+  .star-opt { font-size: 20px; cursor: pointer; color: rgba(192,168,128,0.25); transition: color 0.15s; }
+  .star-opt.selected { color: #c8860a; text-shadow: 0 0 6px #e8a020; }
+  .edit-actions { display: flex; gap: 10px; margin-top: 18px; }
+  .save-btn { flex: 1; padding: 8px; background: linear-gradient(135deg, #8040c0, #6020a0); border: 1px solid #c080e0;
+    color: #fff; border-radius: 3px; font-family: 'Cinzel', serif; font-size: 11px; font-weight: 700; cursor: pointer; letter-spacing: 1px; }
+  .save-btn:hover { background: linear-gradient(135deg, #a060e0, #8040c0); }
+  .cancel-btn { flex: 1; padding: 8px; background: linear-gradient(135deg, #3a2010, #2a1608); border: 1px solid #6b4010;
+    color: #a07840; border-radius: 3px; font-family: 'Cinzel', serif; font-size: 11px; font-weight: 700; cursor: pointer; letter-spacing: 1px; }
+
+  /* Password modal */
+  .pw-modal { max-width: 360px; background: linear-gradient(160deg, #2a1a3a, #1a0e28) !important; border-color: #6b4090 !important; text-align: center; }
+  .pw-title { font-size: 14px; font-weight: 700; color: #c080e0; margin-bottom: 16px; margin-top: 6px; letter-spacing: 2px; }
+  .pw-input { width: 100%; background: #1a0e28; border: 1px solid #6b4090; border-radius: 3px;
+    color: #e0c0f0; font-family: 'Cinzel', serif; font-size: 13px; padding: 8px 12px;
+    outline: none; text-align: center; letter-spacing: 4px; margin-bottom: 12px; }
+  .pw-input:focus { border-color: #c080e0; }
+  .pw-error { font-size: 10px; color: #c04040; letter-spacing: 1px; margin-bottom: 10px; min-height: 14px; }
+  .pw-btn { width: 100%; padding: 8px; background: linear-gradient(135deg, #8040c0, #6020a0); border: 1px solid #c080e0;
+    color: #fff; border-radius: 3px; font-family: 'Cinzel', serif; font-size: 11px; font-weight: 700; cursor: pointer; letter-spacing: 1px; }
+
+  /* Confirm delete */
+  .confirm-modal { max-width: 340px; background: linear-gradient(160deg, #3a1010, #280a0a) !important; border-color: #901010 !important; text-align: center; }
+  .confirm-title { font-size: 14px; font-weight: 700; color: #e04040; margin-bottom: 10px; margin-top: 6px; letter-spacing: 2px; }
+  .confirm-text { font-size: 11px; color: #c08080; line-height: 1.6; margin-bottom: 16px; }
+  .confirm-actions { display: flex; gap: 10px; }
+  .confirm-yes { flex: 1; padding: 8px; background: linear-gradient(135deg, #c01010, #801010); border: 1px solid #e04040;
+    color: #fff; border-radius: 3px; font-family: 'Cinzel', serif; font-size: 11px; font-weight: 700; cursor: pointer; }
+  .confirm-no { flex: 1; padding: 8px; background: linear-gradient(135deg, #3a2010, #2a1608); border: 1px solid #6b4010;
+    color: #a07840; border-radius: 3px; font-family: 'Cinzel', serif; font-size: 11px; font-weight: 700; cursor: pointer; }
+
+  .board-footer { text-align: center; margin-top: 16px; }
+  .footer-rule { width: 60%; height: 1px; background: linear-gradient(90deg, transparent, #c8a060, transparent); margin: 0 auto 10px; }
+  .board-footer p { font-size: 9px; color: #6b4820; letter-spacing: 2px; }
 </style>
 </head>
 <body>
 
 <div class="board">
-  <div class="bolt bolt-tl"></div>
-  <div class="bolt bolt-tr"></div>
-  <div class="bolt bolt-bl"></div>
-  <div class="bolt bolt-br"></div>
+  <div class="bolt bolt-tl"></div><div class="bolt bolt-tr"></div>
+  <div class="bolt bolt-bl"></div><div class="bolt bolt-br"></div>
 
   <div class="board-title">
     <h1>⚔ ADVENTURE BOARD ⚔</h1>
@@ -337,13 +196,20 @@
     <div class="title-rule"></div>
   </div>
 
-  <div class="filters">
-    <button class="filter-btn active" onclick="setFilter('All', this)">All</button>
-    <button class="filter-btn" onclick="setFilter('Iron', this)">Iron</button>
-    <button class="filter-btn" onclick="setFilter('Bronze', this)">Bronze</button>
-    <button class="filter-btn" onclick="setFilter('Silver', this)">Silver</button>
+  <div class="top-bar">
+    <div class="filters">
+      <button class="filter-btn active" onclick="setFilter('All',this)">All</button>
+      <button class="filter-btn" onclick="setFilter('Iron',this)">Iron</button>
+      <button class="filter-btn" onclick="setFilter('Bronze',this)">Bronze</button>
+      <button class="filter-btn" onclick="setFilter('Silver',this)">Silver</button>
+    </div>
+    <div style="display:flex;gap:8px;">
+      <button class="dm-btn add-btn" id="add-btn" style="display:none" onclick="openAddModal()">+ Add Quest</button>
+      <button class="dm-btn" id="dm-toggle" onclick="toggleDM()">⚙ DM Mode</button>
+    </div>
   </div>
 
+  <div class="dm-banner" id="dm-banner">⚔ DM MODE ACTIVE — Click any quest to edit or delete ⚔</div>
   <div id="quest-sections"></div>
 
   <div class="board-footer">
@@ -352,12 +218,12 @@
   </div>
 </div>
 
-<!-- Modal -->
-<div class="modal-overlay" id="modal" onclick="closeModal(event)">
+<!-- View Modal -->
+<div class="modal-overlay" id="view-modal" onclick="closeViewModal(event)">
   <div class="modal-card" id="modal-card">
     <div class="modal-pin"></div>
     <div class="modal-torn" id="modal-torn"></div>
-    <button class="modal-close" id="modal-close" onclick="closeModalDirect()">✕</button>
+    <button class="modal-close" id="modal-close" onclick="document.getElementById('view-modal').classList.remove('open')">✕</button>
     <div class="modal-meta" id="modal-meta"></div>
     <div class="modal-title" id="modal-title"></div>
     <div class="modal-desc" id="modal-desc"></div>
@@ -366,17 +232,103 @@
   </div>
 </div>
 
+<!-- Password Modal -->
+<div class="modal-overlay" id="pw-modal">
+  <div class="modal-card pw-modal">
+    <div class="modal-pin"></div>
+    <div class="pw-title">⚙ DM ACCESS</div>
+    <p style="font-size:10px;color:#a080c0;letter-spacing:1px;margin-bottom:14px;">Enter the DM password to edit the board</p>
+    <input class="pw-input" id="pw-input" type="password" placeholder="••••••" onkeydown="if(event.key==='Enter')checkPassword()">
+    <div class="pw-error" id="pw-error"></div>
+    <button class="pw-btn" onclick="checkPassword()">ENTER</button>
+    <button class="cancel-btn" style="width:100%;margin-top:8px;padding:8px;border-radius:3px;" onclick="document.getElementById('pw-modal').classList.remove('open')">CANCEL</button>
+  </div>
+</div>
+
+<!-- Edit/Add Modal -->
+<div class="modal-overlay" id="edit-modal">
+  <div class="modal-card edit-modal">
+    <div class="modal-pin"></div>
+    <div class="edit-title" id="edit-modal-title">EDIT QUEST</div>
+    <div class="edit-grid">
+      <div class="edit-field full">
+        <label class="edit-label">Quest Title</label>
+        <input class="edit-input" id="e-title" type="text">
+      </div>
+      <div class="edit-field">
+        <label class="edit-label">Rank</label>
+        <select class="edit-select" id="e-rank">
+          <option value="Iron">Iron</option>
+          <option value="Bronze">Bronze</option>
+          <option value="Silver">Silver</option>
+          <option value="Gold">Gold</option>
+        </select>
+      </div>
+      <div class="edit-field">
+        <label class="edit-label">Difficulty</label>
+        <div class="star-selector" id="star-selector">
+          <span class="star-opt selected" data-val="1" onclick="setStar(1)">★</span>
+          <span class="star-opt" data-val="2" onclick="setStar(2)">★</span>
+          <span class="star-opt" data-val="3" onclick="setStar(3)">★</span>
+        </div>
+      </div>
+      <div class="edit-field">
+        <label class="edit-label">Reward</label>
+        <input class="edit-input" id="e-reward" type="text">
+      </div>
+      <div class="edit-field">
+        <label class="edit-label">Posted By</label>
+        <input class="edit-input" id="e-postedBy" type="text">
+      </div>
+      <div class="edit-field">
+        <label class="edit-label">Location</label>
+        <input class="edit-input" id="e-location" type="text">
+      </div>
+      <div class="edit-field full">
+        <label class="edit-label">Description</label>
+        <textarea class="edit-textarea" id="e-description" rows="3"></textarea>
+      </div>
+      <div class="edit-field full">
+        <label class="edit-label">Objective</label>
+        <textarea class="edit-textarea" id="e-objective" rows="2"></textarea>
+      </div>
+      <div class="edit-field full">
+        <label class="edit-label">Notes</label>
+        <textarea class="edit-textarea" id="e-notes" rows="2"></textarea>
+      </div>
+    </div>
+    <div class="edit-actions">
+      <button class="cancel-btn" onclick="closeEditModal()">CANCEL</button>
+      <button class="save-btn" onclick="saveQuest()">SAVE QUEST</button>
+    </div>
+  </div>
+</div>
+
+<!-- Confirm Delete Modal -->
+<div class="modal-overlay" id="confirm-modal">
+  <div class="modal-card confirm-modal">
+    <div class="modal-pin" style="background:radial-gradient(circle at 35% 35%,#e84040,#801010)"></div>
+    <div class="confirm-title">DELETE QUEST?</div>
+    <div class="confirm-text" id="confirm-text"></div>
+    <div class="confirm-actions">
+      <button class="confirm-no" onclick="document.getElementById('confirm-modal').classList.remove('open')">CANCEL</button>
+      <button class="confirm-yes" onclick="confirmDelete()">DELETE</button>
+    </div>
+  </div>
+</div>
+
 <script>
+const DM_PASSWORD = "dungeon";
+
 const rankColors = {
   Iron:   { bg: "#c0a882", border: "#8a7355", text: "#3a2a10", badge: "#8a7355" },
   Bronze: { bg: "#d4956a", border: "#8b5e3c", text: "#3a1a08", badge: "#8b5e3c" },
   Silver: { bg: "#b8bcc8", border: "#6e7585", text: "#1a1e2a", badge: "#6e7585" },
   Gold:   { bg: "#e8c84a", border: "#a08020", text: "#2a1e00", badge: "#a08020" },
 };
-
 const rankOrder = ["Iron", "Bronze", "Silver", "Gold"];
 
-const quests = [
+let quests = [
   { title: "Wolfpack Thinning", rank: "Iron", diff: 1, reward: "40gp + 15gp bonus", postedBy: "Rookstone Farmers Collective", description: "A pack of oversized wolves has been raiding livestock on the eastern farms. Three confirmed attacks in the past week. Farmers are scared and losses are mounting.", objective: "Thin the pack and bring back the alpha's ear as proof.", notes: "Two Green-rank groups already passed on this. Nobody says why.", location: "Eastern farms, one day from Palisade" },
   { title: "Escort — Sister Orvyn's Supply Run", rank: "Iron", diff: 1, reward: "30gp + one free heal per member", postedBy: "Sister Orvyn, The Mending Post", description: "Medicines and reagents need picking up from a supplier two days north and returned safely to Palisade. The road has seen bandit activity recently.", objective: "Escort Sister Orvyn to the supplier and back safely.", notes: "Sister Orvyn will be accompanying you. She is, quote, 'perfectly capable of keeping up.'", location: "North Road, two days travel" },
   { title: "Bridge Assessment — Coldrun Crossing", rank: "Iron", diff: 1, reward: "20gp", postedBy: "Palisade Trade Commission", description: "The Coldrun bridge has been structurally compromised following recent flooding. An engineer needs to assess the damage but the crossing has become dangerous.", objective: "Escort the engineer to Coldrun Crossing and keep him alive while he works.", notes: "Non-combat likely. Structural hazard is the main concern.", location: "Coldrun Crossing, half day east" },
@@ -389,18 +341,20 @@ const quests = [
   { title: "Creature Disturbance — Ashplains Fringe", rank: "Bronze", diff: 2, reward: "120gp", postedBy: "Palisade Society Hall", description: "Something large has been moving along the Ashplains border at night. Three homesteads destroyed, no casualties yet. Origin and nature unknown.", objective: "Track, identify, and neutralise the creature.", notes: "Footprints recovered are unlike any catalogued species. Society wants a specimen sample if possible.", location: "Ashplains fringe, eastern border" },
   { title: "Dungeon Clear — The Siltmere Burrows", rank: "Bronze", diff: 3, reward: "200gp + salvage rights", postedBy: "Millward Town Council", description: "A flooded dungeon complex south of Millward has become active after years of dormancy. Creatures emerging at night. If left unchecked it becomes a regional problem.", objective: "Clear the Siltmere Burrows completely. No partial completions accepted.", notes: "Last group came back short two members. They did come back. Watch the second room.", location: "Siltmere Burrows, south of Millward" },
   { title: "Investigation — The Hollow Fringe", rank: "Bronze", diff: 3, reward: "175gp + Society commendation", postedBy: "Society Archival Division", description: "Corruption behavior at The Hollow's edge has changed in the past month. Previously predictable patterns have become erratic. Society wants eyes on it.", objective: "Observe and document changes at the Hollow fringe. Do not enter The Hollow itself.", notes: "DO NOT ENTER THE HOLLOW. This is not a suggestion. Previous groups who entered are listed as missing, not dead, because we never found them.", location: "The Hollow fringe, central Ceder" },
-  { title: "Bounty — The Ashen Choir", rank: "Silver", diff: 2, reward: "400gp + Society bounty bonus", postedBy: "Adventure Society, Regional Command", description: "A cult operating out of the Ashplains has been raiding caravans and leaving survivors in a changed state — docile, vacant, and unable to recall events. Find their base.", objective: "Locate the Ashen Choir's base of operations and neutralise leadership.", notes: "Survivors describe chanting and a smell of ash and copper before losing consciousness. Cult numbers estimated at 30–50.", location: "Ashplains interior, exact location unknown" },
+  { title: "Bounty — The Ashen Choir", rank: "Silver", diff: 2, reward: "400gp + Society bounty bonus", postedBy: "Adventure Society, Regional Command", description: "A cult operating out of the Ashplains has been raiding caravans and leaving survivors in a changed state — docile, vacant, and unable to recall events. Find their base.", objective: "Locate the Ashen Choir's base of operations and neutralise leadership.", notes: "Survivors describe chanting and a smell of ash and copper before losing consciousness. Cult numbers estimated at 30-50.", location: "Ashplains interior, exact location unknown" },
   { title: "Escort — Councillor's Envoy", rank: "Silver", diff: 2, reward: "350gp", postedBy: "Office of Councillor Edric Voss", description: "A political envoy carrying sensitive documents must travel from Palisade to Thornvast safely. Threat level assessed as significant. Previous escort attempt failed.", objective: "Deliver the envoy and documents to Thornvast intact. Discretion required.", notes: "Nature of the documents is classified. You are not to read them. Councillor Voss will know if you do.", location: "Palisade to Thornvast, South Road" },
   { title: "Anomaly Response — Frostmere Outpost", rank: "Silver", diff: 3, reward: "600gp + Society emergency bonus", postedBy: "Adventure Society, Regional Command", description: "The Frostmere outpost has gone silent. Last report three weeks ago mentioned something moving under the ice. Six staff unaccounted for.", objective: "Reach the Frostmere outpost, determine what happened, and eliminate the threat.", notes: "Third posting. No takers. Emergency classification active. Society is offering additional hazard compensation.", location: "Frostmere outpost, northeast Ceder" },
 ];
 
 let currentFilter = "All";
+let dmMode = false;
+let editingIndex = -1;
+let deleteIndex = -1;
+let editDiff = 1;
 
 function stars(diff) {
   let s = '';
-  for (let i = 1; i <= 3; i++) {
-    s += `<span class="${i <= diff ? 'star-on' : 'star-off'}">★</span>`;
-  }
+  for (let i = 1; i <= 3; i++) s += `<span class="${i <= diff ? 'star-on' : 'star-off'}">★</span>`;
   return `<span class="stars">${s}</span>`;
 }
 
@@ -408,37 +362,40 @@ function renderBoard() {
   const container = document.getElementById('quest-sections');
   container.innerHTML = '';
   const filtered = currentFilter === 'All' ? quests : quests.filter(q => q.rank === currentFilter);
-
   rankOrder.forEach(rank => {
     const qs = filtered.filter(q => q.rank === rank);
     if (!qs.length) return;
     const c = rankColors[rank];
-
     const section = document.createElement('div');
     section.className = 'rank-section';
     section.innerHTML = `
       <div class="rank-divider">
-        <div class="line" style="background: linear-gradient(90deg, transparent, ${c.border})"></div>
-        <span style="color: ${c.border}">${rank} Rank</span>
-        <div class="line" style="background: linear-gradient(90deg, ${c.border}, transparent)"></div>
+        <div class="line" style="background:linear-gradient(90deg,transparent,${c.border})"></div>
+        <span style="color:${c.border}">${rank} Rank</span>
+        <div class="line" style="background:linear-gradient(90deg,${c.border},transparent)"></div>
       </div>
       <div class="cards-grid">
-        ${qs.map((q, i) => `
-          <div class="quest-card" onclick="openModal(${quests.indexOf(q)})"
-            style="background: linear-gradient(135deg, ${c.bg}ee, ${c.bg}cc); border-color: ${c.border}; color: ${c.text};">
+        ${qs.map(q => {
+          const idx = quests.indexOf(q);
+          return `<div class="quest-card${dmMode?' dm-mode':''}" 
+            onclick="${dmMode ? '' : `openModal(${idx})`}"
+            style="background:linear-gradient(135deg,${c.bg}ee,${c.bg}cc);border-color:${c.border};color:${c.text};">
             <div class="pin"></div>
-            <div class="torn-edge" style="background: repeating-linear-gradient(90deg, transparent, transparent 4px, ${c.border}44 4px, ${c.border}44 5px)"></div>
-            <div class="card-title" style="color: ${c.text}">${q.title}</div>
+            <div class="torn-edge" style="background:repeating-linear-gradient(90deg,transparent,transparent 4px,${c.border}44 4px,${c.border}44 5px)"></div>
+            <div class="card-title" style="color:${c.text}">${q.title}</div>
             <div class="card-meta">
-              <span class="rank-badge" style="background: ${c.badge}">${q.rank}</span>
+              <span class="rank-badge" style="background:${c.badge}">${q.rank}</span>
               ${stars(q.diff)}
             </div>
-            <div class="card-reward" style="color: ${c.text}">${q.reward.split(',')[0]}</div>
-            <div class="card-tap" style="color: ${c.text}">TAP TO READ</div>
-          </div>
-        `).join('')}
-      </div>
-    `;
+            <div class="card-reward" style="color:${c.text}">${q.reward.split(',')[0]}</div>
+            <div class="card-tap" style="color:${c.text}">${dmMode ? 'USE BUTTONS BELOW' : 'TAP TO READ'}</div>
+            <div class="card-dm-actions">
+              <button class="card-dm-btn edit-card-btn" onclick="openEditModal(${idx})">✏ EDIT</button>
+              <button class="card-dm-btn delete-card-btn" onclick="openDeleteConfirm(${idx})">✕ DELETE</button>
+            </div>
+          </div>`;
+        }).join('')}
+      </div>`;
     container.appendChild(section);
   });
 }
@@ -450,33 +407,57 @@ function setFilter(rank, btn) {
   renderBoard();
 }
 
+function toggleDM() {
+  if (!dmMode) {
+    document.getElementById('pw-input').value = '';
+    document.getElementById('pw-error').textContent = '';
+    document.getElementById('pw-modal').classList.add('open');
+  } else {
+    dmMode = false;
+    document.getElementById('dm-toggle').classList.remove('active');
+    document.getElementById('dm-toggle').textContent = '⚙ DM Mode';
+    document.getElementById('dm-banner').classList.remove('visible');
+    document.getElementById('add-btn').style.display = 'none';
+    renderBoard();
+  }
+}
+
+function checkPassword() {
+  const val = document.getElementById('pw-input').value;
+  if (val === DM_PASSWORD) {
+    document.getElementById('pw-modal').classList.remove('open');
+    dmMode = true;
+    document.getElementById('dm-toggle').classList.add('active');
+    document.getElementById('dm-toggle').textContent = '⚙ Exit DM Mode';
+    document.getElementById('dm-banner').classList.add('visible');
+    document.getElementById('add-btn').style.display = 'block';
+    renderBoard();
+  } else {
+    document.getElementById('pw-error').textContent = 'Incorrect password.';
+    document.getElementById('pw-input').value = '';
+  }
+}
+
 function openModal(index) {
+  if (dmMode) return;
   const q = quests[index];
   const c = rankColors[q.rank];
-  const modal = document.getElementById('modal');
+  const modal = document.getElementById('view-modal');
   const card = document.getElementById('modal-card');
-
-  card.style.background = `linear-gradient(160deg, ${c.bg}f8, ${c.bg}e0)`;
+  card.style.background = `linear-gradient(160deg,${c.bg}f8,${c.bg}e0)`;
   card.style.borderColor = c.border;
-
-  document.getElementById('modal-torn').style.background =
-    `repeating-linear-gradient(90deg, transparent, transparent 6px, ${c.border}55 6px, ${c.border}55 7px)`;
+  document.getElementById('modal-torn').style.background = `repeating-linear-gradient(90deg,transparent,transparent 6px,${c.border}55 6px,${c.border}55 7px)`;
   document.getElementById('modal-close').style.color = c.text;
-
   const riskLabel = q.diff === 1 ? 'Low Risk' : q.diff === 2 ? 'Standard Risk' : '⚠ HIGH RISK';
   document.getElementById('modal-meta').innerHTML = `
-    <span class="rank-badge" style="background: ${c.badge}; font-size: 10px; padding: 3px 10px; letter-spacing: 2px;">${q.rank} Rank</span>
+    <span class="rank-badge" style="background:${c.badge};font-size:10px;padding:3px 10px;letter-spacing:2px;">${q.rank} Rank</span>
     ${stars(q.diff)}
-    <span class="modal-risk" style="color: ${c.text}">${riskLabel}</span>
-  `;
-
+    <span class="modal-risk" style="color:${c.text}">${riskLabel}</span>`;
   document.getElementById('modal-title').style.color = c.text;
   document.getElementById('modal-title').style.borderBottom = `1px solid ${c.border}55`;
   document.getElementById('modal-title').textContent = q.title;
-
   document.getElementById('modal-desc').style.color = c.text;
   document.getElementById('modal-desc').textContent = q.description;
-
   const rows = [
     { label: 'OBJECTIVE', value: q.objective },
     { label: 'LOCATION', value: q.location },
@@ -484,31 +465,91 @@ function openModal(index) {
     { label: 'REWARD', value: q.reward },
     { label: 'NOTES', value: q.notes, italic: true, warning: q.notes.includes('DO NOT') },
   ];
-
   document.getElementById('modal-rows').innerHTML = rows.map(row => `
     <div class="modal-row">
-      <span class="modal-label" style="color: ${c.badge}">${row.label}</span>
-      <span class="modal-value ${row.warning ? 'warning' : ''}"
-        style="color: ${row.warning ? '#8b1010' : c.text}; font-style: ${row.italic && !row.warning ? 'italic' : 'normal'}">
-        ${row.value}
-      </span>
-    </div>
-  `).join('');
-
-  document.getElementById('modal-footer') && (document.querySelector('.modal-footer').style.borderTop = `1px solid ${c.border}55`);
+      <span class="modal-label" style="color:${c.badge}">${row.label}</span>
+      <span class="modal-value ${row.warning?'warning':''}" style="color:${row.warning?'#8b1010':c.text};font-style:${row.italic&&!row.warning?'italic':'normal'}">${row.value}</span>
+    </div>`).join('');
+  document.querySelector('.modal-footer').style.borderTop = `1px solid ${c.border}55`;
   document.querySelector('.modal-footer').style.color = c.text;
-
   modal.classList.add('open');
 }
 
-function closeModal(e) {
-  if (e.target === document.getElementById('modal')) {
-    document.getElementById('modal').classList.remove('open');
-  }
+function closeViewModal(e) {
+  if (e.target === document.getElementById('view-modal')) document.getElementById('view-modal').classList.remove('open');
 }
 
-function closeModalDirect() {
-  document.getElementById('modal').classList.remove('open');
+function setStar(val) {
+  editDiff = val;
+  document.querySelectorAll('.star-opt').forEach(s => {
+    s.classList.toggle('selected', parseInt(s.dataset.val) <= val);
+  });
+}
+
+function openEditModal(index) {
+  editingIndex = index;
+  const q = quests[index];
+  document.getElementById('edit-modal-title').textContent = 'EDIT QUEST';
+  document.getElementById('e-title').value = q.title;
+  document.getElementById('e-rank').value = q.rank;
+  document.getElementById('e-reward').value = q.reward;
+  document.getElementById('e-postedBy').value = q.postedBy;
+  document.getElementById('e-location').value = q.location;
+  document.getElementById('e-description').value = q.description;
+  document.getElementById('e-objective').value = q.objective;
+  document.getElementById('e-notes').value = q.notes;
+  setStar(q.diff);
+  document.getElementById('edit-modal').classList.add('open');
+}
+
+function openAddModal() {
+  editingIndex = -1;
+  document.getElementById('edit-modal-title').textContent = 'ADD NEW QUEST';
+  document.getElementById('e-title').value = '';
+  document.getElementById('e-rank').value = 'Bronze';
+  document.getElementById('e-reward').value = '';
+  document.getElementById('e-postedBy').value = '';
+  document.getElementById('e-location').value = '';
+  document.getElementById('e-description').value = '';
+  document.getElementById('e-objective').value = '';
+  document.getElementById('e-notes').value = '';
+  setStar(1);
+  document.getElementById('edit-modal').classList.add('open');
+}
+
+function closeEditModal() {
+  document.getElementById('edit-modal').classList.remove('open');
+}
+
+function saveQuest() {
+  const updated = {
+    title: document.getElementById('e-title').value.trim(),
+    rank: document.getElementById('e-rank').value,
+    diff: editDiff,
+    reward: document.getElementById('e-reward').value.trim(),
+    postedBy: document.getElementById('e-postedBy').value.trim(),
+    location: document.getElementById('e-location').value.trim(),
+    description: document.getElementById('e-description').value.trim(),
+    objective: document.getElementById('e-objective').value.trim(),
+    notes: document.getElementById('e-notes').value.trim(),
+  };
+  if (!updated.title) { alert('Quest title is required.'); return; }
+  if (editingIndex === -1) quests.push(updated);
+  else quests[editingIndex] = updated;
+  closeEditModal();
+  renderBoard();
+}
+
+function openDeleteConfirm(index) {
+  deleteIndex = index;
+  document.getElementById('confirm-text').textContent = `Are you sure you want to remove "${quests[index].title}" from the board? This cannot be undone.`;
+  document.getElementById('confirm-modal').classList.add('open');
+}
+
+function confirmDelete() {
+  if (deleteIndex >= 0) { quests.splice(deleteIndex, 1); deleteIndex = -1; }
+  document.getElementById('confirm-modal').classList.remove('open');
+  renderBoard();
 }
 
 renderBoard();
